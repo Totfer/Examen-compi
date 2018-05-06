@@ -1,0 +1,403 @@
+package compi;
+
+import java_cup.runtime.Symbol;
+import java.awt.List;
+import java.util.ArrayList;
+
+//PARSER 
+parser code
+{:     
+    //Error recovery
+    public void syntax_error(Symbol s){
+        Errorjv.texto += "Syntax error: " + s.value + " Line " + (s.left+1) + " Col " + ( s.right + 1) +"\n";
+        System.out.println("Syntax error: " + s.value + " Line " + (s.left+1) + " Col " + ( s.right + 1) );
+    }
+
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception{ 
+        Errorjv.texto += "Syntax error: " + s.value + " Line " + (s.left+1) + " Col " + ( s.right + 1) +"\n";
+        System.out.println("Fatal Syntax Error: "+ s.value + " Linea " + (s.left+1) + " Col " + (s.right + 1) +"\n");
+    }
+:}
+
+action code
+{:
+    String aux = "";
+    String clase = "";
+    String metodo = "variable global";
+    String tipop = "";
+    int contador = 0;
+    int contador2 = 0;
+    int nli = 0;
+    int nlf = 0;
+    public String codigo = "";
+:}
+
+terminal String IMP, VOIDD, CLAS, COMILLA, NEWW, MASMAS, MENOSMENOS, PAR_A, PAR_B, CORRCH_A, CORRCH_B, COMA, PUNTOCOMA, PUNTO, MENORR, MENORRIGUAL, MAYORR, MAYORRIGUAL, DIFERENTE, GUALIGUAL, ANDD;
+terminal String ORR, NOTT, MAS, MODULO, MENOS, POR, COMILLASIMP, DIVIDIR,  INT, CHARR,  BOOL, DOUB, LONGG, STRINGG, PUB, PROTEC, PRIV,  STAT, FINA, RET,  BRE,  IFF,  ELS,  DEF,  CAS;
+terminal String FORR, WHIL, THE, DOSPUNTOS, SWIT, DOO, PACK, CONS, READL, WRITEL, MASS, NUMERO, IDD, FILA, IGUALIGUAL, TEXTO, IGUAL, TRU, FAL, TEXTO1, CONT; 
+
+
+nonterminal String INICIO, IMPORTCLASS, MOD, IMPORT, IMPORT2, CLASS, NOMBREIMP, PACKAGE, CADENAIMP, CADENAIMPPUNTO, CADENAIMPID, VISIB, OPERADORES, CONTENIDOSWITCH3;
+nonterminal String IIF, CONDICION, CADENAIMPASTER, CONTENIDOCLASE, DECLARACIONDATO, VACIO, STATIC, DECLARACION, TIPOD, LISTAID, LISTAID2, EXP, NUMID, OPMAT;
+nonterminal String DECLACADENA, ASIGNAR, DECLAMETODO, PARAMETROS, PARAMETROS2, PARAMETROS3, CONTENIDOMETODO, CONTENIDOMETODO2, IIFF, CONTENIDOCLASE2, CONDIFF, IDDD;
+nonterminal String METODODATO, NO, CONTENIDOMETODO3, FINAL, FINALSTATIC, CONDICION2, OP, OPOI, ELSE, ELSE2, ELSE1, ELSEI, WHILE, DO, FOR, ELSEI2, ELSEI3, PRINT,PA;
+nonterminal String SWITCH, THES, LLAMADA, CONTENIDOLLAMADA, CONTENIDOLLAMADA2, CONTENIDOSWITCH, CONTENIDOSWITCH2, COMILL, DEFAULT, RETURN, RETURN2, MET, LLAMADA2, LLAMADA3, INT2, FINAL2;
+
+precedence left MAS, MENOS, POR, DIVIDIR, MODULO;
+
+start with INICIO;
+
+INICIO ::= PACKAGE
+;
+
+PACKAGE ::= PA PUNTOCOMA IMPORTCLASS
+         |IMPORTCLASS
+         |error PUNTOCOMA
+         |error CORRCH_B
+         
+
+;
+PA::=PACK IDD
+;
+
+IMPORTCLASS ::= IMPORT CLASS
+             |CLASS
+;
+
+CLASS ::= VISIB CLAS:cla IDD:id {:clase = id;:} CORRCH_A CONTENIDOCLASE2 CORRCH_B
+{:
+:}
+;
+
+CONTENIDOCLASE2 ::= CONTENIDOCLASE2 CONTENIDOCLASE
+                |CONTENIDOCLASE
+;
+
+CONTENIDOCLASE ::= DECLARACIONDATO
+                |DECLAMETODO
+;
+
+DECLAMETODO ::= VISIB STATIC TIPOD:td IDD:id {: metodo = id;:} PAR_A PARAMETROS3:paramet PAR_B CORRCH_A CONTENIDOMETODO3 CORRCH_B
+{:
+           
+        
+:}
+              |VISIB STATIC VOIDD:td IDD:id {: metodo = id;:} PAR_A PARAMETROS3:parat PAR_B CORRCH_A CONTENIDOMETODO3 CORRCH_B
+{:
+         
+:}          
+;
+
+RETURN::= RET EXP PUNTOCOMA
+        |RET PUNTOCOMA
+
+;
+
+MOD::= IDD MAS IGUAL EXP PUNTOCOMA 
+
+;
+
+CONTENIDOMETODO3 ::= CONTENIDOMETODO
+                  |VACIO
+;
+
+CONTENIDOMETODO ::= CONTENIDOMETODO CONTENIDOMETODO2
+                |CONTENIDOMETODO2
+;
+
+CONTENIDOMETODO2 ::= METODODATO
+                   |IIFF
+                   |WHILE
+                   |DO
+                   |FOR
+                   |SWITCH
+                   |LLAMADA
+                   |THES
+                   |RETURN 
+                   |BRE PUNTOCOMA
+                   |CONT PUNTOCOMA
+                   |error PUNTOCOMA 
+                   |error CORRCH_B
+                   
+;
+
+PRINT::=CONS PUNTO READL PUNTO WRITEL PAR_A EXP PAR_B PUNTOCOMA
+
+;
+
+THES ::=THE PUNTO IDD IGUAL EXP PUNTOCOMA
+   
+;
+
+LLAMADA2 ::= LLAMADA3 
+          |VACIO
+;
+
+LLAMADA3::=LLAMADA3 PUNTO IDD 
+        |PUNTO IDD
+;
+
+LLAMADA ::= IDD LLAMADA2 PAR_A CONTENIDOLLAMADA PAR_B PUNTOCOMA
+
+;
+
+CONTENIDOLLAMADA ::= CONTENIDOLLAMADA COMA CONTENIDOLLAMADA2
+                   |CONTENIDOLLAMADA2
+;
+
+CONTENIDOLLAMADA2 ::= EXP
+;
+
+SWITCH::= SWIT PAR_A EXP PAR_B CORRCH_A CONTENIDOSWITCH2 CORRCH_B
+
+;
+
+CONTENIDOSWITCH2::= CONTENIDOSWITCH3
+                 |VACIO
+;
+
+CONTENIDOSWITCH3 ::=CONTENIDOSWITCH3 CONTENIDOSWITCH
+                   |CONTENIDOSWITCH DEFAULT
+                   
+;
+
+COMILL::= TEXTO1
+        |TEXTO 
+        |NUMERO
+;
+
+DEFAULT ::= DEF DOSPUNTOS CONTENIDOMETODO3 
+         |VACIO
+;
+
+CONTENIDOSWITCH::= CAS COMILL DOSPUNTOS CONTENIDOMETODO3 
+;
+
+FOR ::= FORR PAR_A  IDDD PUNTOCOMA CONDICION PUNTOCOMA IDDD PAR_B CORRCH_A CONTENIDOMETODO3 CORRCH_B
+     
+;
+
+IDDD::=INT2:tipo IDD:idd IGUAL EXP
+       {:
+        :}
+      |IDD IGUAL EXP
+      |IDD MASMAS
+      |IDD MENOSMENOS
+;
+
+INT2 ::= INT:in
+{:
+RESULT =in;
+:}
+      |CHARR:ch
+{:
+RESULT =ch;
+:}
+      |DOUB:duu
+{:
+RESULT =duu;
+:}      
+;
+
+DO ::= DOO CORRCH_A CONTENIDOMETODO3 CORRCH_B WHIL PAR_A CONDICION PAR_B 
+;
+
+WHILE ::= WHIL PAR_A CONDICION PAR_B CORRCH_A CONTENIDOMETODO3 CORRCH_B
+       
+;
+
+METODODATO::= TIPOD:td IDD:id ASIGNAR PUNTOCOMA
+            {:
+            :}
+            |IDD ASIGNAR PUNTOCOMA
+            |FINA TIPOD:tip IDD:id ASIGNAR PUNTOCOMA
+            {:
+            :}
+            |IDD IDD IGUAL NEWW IDD PAR_A PAR_B PUNTOCOMA   
+            |IDD MAS IGUAL EXP PUNTOCOMA 
+            |IDD MENOS IGUAL EXP PUNTOCOMA
+            |IDD MODULO IGUAL EXP PUNTOCOMA 
+            |IDD POR IGUAL EXP PUNTOCOMA 
+            |IDD DIVIDIR IGUAL EXP PUNTOCOMA             
+;
+
+IIFF ::= IFF PAR_A CONDICION PAR_B CORRCH_A CONTENIDOMETODO3 CORRCH_B ELSEI3   
+    
+;
+
+ELSEI3 ::= ELSEI 
+        |ELSE1
+        |ELSEI2
+        |VACIO
+;
+
+ELSEI2::= ELSEI ELSE1
+         VACIO
+;
+
+ELSEI ::= ELSEI ELSE
+        |ELSE
+;
+
+ELSE ::= ELS IFF PAR_A CONDICION PAR_B CORRCH_A CONTENIDOMETODO3 CORRCH_B 
+      
+;
+
+
+ELSE1 ::= ELSE1 ELSE2
+        |ELSE2
+;
+
+ELSE2 ::= ELS CORRCH_A CONTENIDOMETODO3 CORRCH_B
+   
+;
+
+
+
+CONDICION ::= CONDICION OPOI CONDICION2
+            |CONDICION2
+;
+
+
+
+CONDICION2 ::= EXP OP EXP
+            |NOTT EXP IGUAL EXP
+            |NOTT IDD
+            |LLAMADA
+            |IDD 
+            |FAL   
+            |TRU
+;
+
+PARAMETROS3::= PARAMETROS:pa {:RESULT = pa;:}
+            |VACIO
+; 
+
+PARAMETROS ::= PARAMETROS COMA PARAMETROS2
+              |PARAMETROS2
+;
+
+PARAMETROS2 ::= TIPOD:td IDD:id
+{:
+          
+
+:}
+; 
+  
+DECLARACIONDATO ::= DECLACADENA ASIGNAR PUNTOCOMA           
+                  |IDD ASIGNAR PUNTOCOMA
+                  |FINALSTATIC ASIGNAR PUNTOCOMA
+                  |IDD IDD IGUAL NEWW IDD PUNTOCOMA
+                  |IDD MAS IGUAL EXP PUNTOCOMA 
+                  |IDD MENOS IGUAL EXP PUNTOCOMA
+                  |IDD MODULO IGUAL EXP PUNTOCOMA 
+                  |IDD POR IGUAL EXP PUNTOCOMA 
+                  |IDD DIVIDIR IGUAL EXP PUNTOCOMA 
+;
+
+ASIGNAR ::= IGUAL EXP
+        |VACIO
+;
+
+DECLACADENA ::= VISIB STATIC TIPOD:tt  LISTAID
+ {:
+    
+ :}
+;
+
+FINALSTATIC::=FINAL STATIC TIPOD:td {:tipop = td;:} LISTAID
+ {:
+   
+ :}
+;
+
+EXP ::= IDD                                           
+    |NUMERO
+    |TEXTO
+    |TRU
+    |FAL
+    |MENOS NUMID
+    |PAR_A EXP PAR_B                                    
+    |EXP MENOS EXP
+    |EXP MAS EXP
+    |EXP POR EXP
+    |EXP DIVIDIR EXP
+    |EXP MODULO EXP
+    |IDD MASMAS   
+    |IDD MENOSMENOS
+    |MASMAS IDD   
+    |MENOSMENOS IDD
+    |TEXTO1   
+;
+
+NUMID ::= IDD
+        |NUMERO
+;
+
+
+LISTAID ::=LISTAID COMA LISTAID2 
+
+        |LISTAID2 {::}
+;
+
+LISTAID2 ::= IDD:id
+{:  
+             
+:}
+;
+
+IMPORT ::= IMPORT IMPORT2
+        |IMPORT2
+;
+       
+IMPORT2 ::= IMP NOMBREIMP PUNTOCOMA
+       
+;
+
+NOMBREIMP ::= CADENAIMP
+            |CADENAIMP PUNTO POR
+;
+
+CADENAIMP ::= CADENAIMP PUNTO IDD
+            |IDD
+;
+
+TIPOD ::= STRINGG:st {: RESULT = st; :}
+        |BOOL:bo     {: RESULT = bo; :}
+        |DOUB:du     {: RESULT = du; :}
+        |INT:in      {: RESULT = in; :}
+        |LONGG:lo    {: RESULT = lo; :}
+        |CHARR:ch    {: RESULT = ch; :}
+        
+;
+
+VOID ::= VOIDD
+;
+
+OPOI ::= ANDD
+      |ORR
+;
+
+VISIB ::= PUB
+       |PRIV
+       |PROTEC
+       |VACIO
+;
+
+FINAL ::= FINA
+        
+;
+
+STATIC ::= STAT
+        |VACIO
+;
+
+VACIO::=;
+
+OP ::= IGUALIGUAL
+    |DIFERENTE
+    |MENORR
+    |MENORRIGUAL    
+    |MAYORR
+    |MAYORRIGUAL
+;
