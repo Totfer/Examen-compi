@@ -3,6 +3,8 @@ package compi;
 import java_cup.runtime.Symbol;
 import java.awt.List;
 import java.util.ArrayList;
+import java.util.Stack;
+
 
 //PARSER 
 parser code
@@ -17,19 +19,44 @@ parser code
         Errorjv.texto += "Syntax error: " + s.value + " Line " + (s.left+1) + " Col " + ( s.right + 1) +"\n";
         System.out.println("Fatal Syntax Error: "+ s.value + " Linea " + (s.left+1) + " Col " + (s.right + 1) +"\n");
     }
+ 
+    public Nodo RegresarNodo(){
+    return nodo;
+    } 
+
+
+    Stack<Nodo> pila = new Stack<Nodo>();     
+
+    Nodo nodo = new Nodo();
+
+Nodo nodolista1=new Nodo();
+Nodo nodolista2=new Nodo();
+Nodo nodoimp=new Nodo(); 
+Nodo nodonombre=new Nodo(); 
+Nodo nodoclas = new Nodo();
+
+Nodo clac = new Nodo(); 
+Nodo visc = new Nodo(); 
+Nodo idc = new Nodo(); 
+Nodo contclase = new Nodo();
+Nodo varc = new Nodo();
+
+Nodo varstatc=new Nodo();
+Nodo listavar=new Nodo();
+Nodo varvisc=new Nodo();
+Nodo vartipoc=new Nodo();
+
+Nodo varfinalc=new Nodo();
+
+
+   
+
 :}
 
 action code
 {:
-    String aux = "";
-    String clase = "";
-    String metodo = "variable global";
-    String tipop = "";
-    int contador = 0;
-    int contador2 = 0;
-    int nli = 0;
-    int nlf = 0;
-    public String codigo = "";
+  public String c = "";
+  
 :}
 
 terminal String IMP, VOIDD, CLAS, COMILLA, NEWW, MASMAS, MENOSMENOS, PAR_A, PAR_B, CORRCH_A, CORRCH_B, COMA, PUNTOCOMA, PUNTO, MENORR, MENORRIGUAL, MAYORR, MAYORRIGUAL, DIFERENTE, GUALIGUAL, ANDD;
@@ -42,31 +69,66 @@ nonterminal String IIF, CONDICION, CADENAIMPASTER, CONTENIDOCLASE, DECLARACIONDA
 nonterminal String DECLACADENA, ASIGNAR, DECLAMETODO, PARAMETROS, PARAMETROS2, PARAMETROS3, CONTENIDOMETODO, CONTENIDOMETODO2, IIFF, CONTENIDOCLASE2, CONDIFF, IDDD;
 nonterminal String METODODATO, NO, CONTENIDOMETODO3, FINAL, FINALSTATIC, CONDICION2, OP, OPOI, ELSE, ELSE2, ELSE1, ELSEI, WHILE, DO, FOR, ELSEI2, ELSEI3, PRINT,PA;
 nonterminal String SWITCH, THES, LLAMADA, CONTENIDOLLAMADA, CONTENIDOLLAMADA2, CONTENIDOSWITCH, CONTENIDOSWITCH2, COMILL, DEFAULT, RETURN, RETURN2, MET, LLAMADA2, LLAMADA3, INT2, FINAL2;
-
+nonterminal String VISFI;
 precedence left MAS, MENOS, POR, DIVIDIR, MODULO;
 
 start with INICIO;
 
-INICIO ::= PACKAGE
+INICIO ::= PACKAGE{:nodo.contenido = "Inico";:}
 ;
 
-PACKAGE ::= PA PUNTOCOMA IMPORTCLASS
+PACKAGE ::= PA:p PUNTOCOMA 
+{: 
+Nodo nod=new Nodo(); 
+Nodo nodopack=new Nodo(); 
+
+nodopack.contenido="Package"; 
+nod.contenido = p; 
+
+nodopack.nodo.add(nod); 
+nodo.nodo.add(nodopack);
+:} 
+IMPORTCLASS 
          |IMPORTCLASS
          |error PUNTOCOMA
          |error CORRCH_B
-         
-
-;
-PA::=PACK IDD
 ;
 
-IMPORTCLASS ::= IMPORT CLASS
+PA::=PACK IDD:id {: RESULT = id; :}
+
+;
+
+
+
+IMPORTCLASS ::= {: 
+nodoimp.contenido="Import"; 
+nodolista1.contenido = "Lista Import";
+nodoimp.nodo.add(nodolista1);
+nodo.nodo.add(nodoimp);
+:} IMPORT:imp  CLASS 
              |CLASS
 ;
 
-CLASS ::= VISIB CLAS:cla IDD:id {:clase = id;:} CORRCH_A CONTENIDOCLASE2 CORRCH_B
+CLASS ::= VISIB:vis CLAS:cla IDD:id CORRCH_A 
 {:
-:}
+nodoclas.contenido = "Clase";
+
+clac.contenido = "clase"; 
+visc.contenido = vis;  
+idc.contenido = id;
+
+contclase.contenido="Contenido Clase";
+
+
+nodoclas.nodo.add(clac);
+nodoclas.nodo.add(visc);
+nodoclas.nodo.add(idc);
+nodoclas.nodo.add(contclase);
+nodo.nodo.add(nodoclas);
+
+:} 
+CONTENIDOCLASE2 CORRCH_B
+
 ;
 
 CONTENIDOCLASE2 ::= CONTENIDOCLASE2 CONTENIDOCLASE
@@ -77,16 +139,9 @@ CONTENIDOCLASE ::= DECLARACIONDATO
                 |DECLAMETODO
 ;
 
-DECLAMETODO ::= VISIB STATIC TIPOD:td IDD:id {: metodo = id;:} PAR_A PARAMETROS3:paramet PAR_B CORRCH_A CONTENIDOMETODO3 CORRCH_B
-{:
-           
-        
-:}
-              |VISIB STATIC VOIDD:td IDD:id {: metodo = id;:} PAR_A PARAMETROS3:parat PAR_B CORRCH_A CONTENIDOMETODO3 CORRCH_B
-{:
-         
-:}          
+DECLAMETODO ::= VISIB STATIC TIPOD:td IDD:id PAR_A PARAMETROS3:paramet PAR_B CORRCH_A CONTENIDOMETODO3 CORRCH_B
 ;
+
 
 RETURN::= RET EXP PUNTOCOMA
         |RET PUNTOCOMA
@@ -157,8 +212,6 @@ CONTENIDOSWITCH2::= CONTENIDOSWITCH3
 ;
 
 CONTENIDOSWITCH3 ::=CONTENIDOSWITCH3 CONTENIDOSWITCH
-                   |CONTENIDOSWITCH DEFAULT
-                   
 ;
 
 COMILL::= TEXTO1
@@ -170,7 +223,8 @@ DEFAULT ::= DEF DOSPUNTOS CONTENIDOMETODO3
          |VACIO
 ;
 
-CONTENIDOSWITCH::= CAS COMILL DOSPUNTOS CONTENIDOMETODO3 
+CONTENIDOSWITCH::= CAS COMILL DOSPUNTOS CONTENIDOMETODO3
+             |DEFAULT DOSPUNTOS CONTENIDOMETODO3
 ;
 
 FOR ::= FORR PAR_A  IDDD PUNTOCOMA CONDICION PUNTOCOMA IDDD PAR_B CORRCH_A CONTENIDOMETODO3 CORRCH_B
@@ -178,8 +232,6 @@ FOR ::= FORR PAR_A  IDDD PUNTOCOMA CONDICION PUNTOCOMA IDDD PAR_B CORRCH_A CONTE
 ;
 
 IDDD::=INT2:tipo IDD:idd IGUAL EXP
-       {:
-        :}
       |IDD IGUAL EXP
       |IDD MASMAS
       |IDD MENOSMENOS
@@ -284,41 +336,94 @@ PARAMETROS2 ::= TIPOD:td IDD:id
 :}
 ; 
   
-DECLARACIONDATO ::= DECLACADENA ASIGNAR PUNTOCOMA           
-                  |IDD ASIGNAR PUNTOCOMA
-                  |FINALSTATIC ASIGNAR PUNTOCOMA
-                  |IDD IDD IGUAL NEWW IDD PUNTOCOMA
-                  |IDD MAS IGUAL EXP PUNTOCOMA 
-                  |IDD MENOS IGUAL EXP PUNTOCOMA
-                  |IDD MODULO IGUAL EXP PUNTOCOMA 
-                  |IDD POR IGUAL EXP PUNTOCOMA 
-                  |IDD DIVIDIR IGUAL EXP PUNTOCOMA 
+DECLARACIONDATO ::= DECLACADENA ASIGNAR PUNTOCOMA    
+                  |FINALSTATIC ASIGNAR PUNTOCOMA 
 ;
 
-ASIGNAR ::= IGUAL EXP
+ASIGNAR ::= IGUAL EXP:exp 
         |VACIO
 ;
 
-DECLACADENA ::= VISIB STATIC TIPOD:tt  LISTAID
- {:
-    
- :}
-;
+DECLACADENA ::= VISIB:vis STATIC:stat TIPOD:tt LISTAID 
+{:
+vartipoc.contenido=tt;
 
-FINALSTATIC::=FINAL STATIC TIPOD:td {:tipop = td;:} LISTAID
- {:
+if(!vis.equals("")&&!stat.equals("")){
+   contclase.nodo.add(varc);
+   varc.contenido ="Variable";
+   varstatc.contenido= stat;
+   listavar.contenido= "Lista Variables";
+   varvisc.contenido = vis;
+   varc.nodo.add(varvisc);
    
- :}
+   varc.nodo.add(varstatc);
+   varc.nodo.add(vartipoc);
+
+   varc.nodo.add(listavar);
+ 
+}
+else if(!vis.equals("")){
+   contclase.nodo.add(varc);
+   varvisc.contenido = vis;
+   varc.contenido ="Variable";  
+   listavar.contenido= "Lista Variables";
+   varc.nodo.add(varvisc);
+   varc.nodo.add(vartipoc);
+
+   varc.nodo.add(listavar);
+ 
+}
+else if(!stat.equals("")){
+   contclase.nodo.add(varc);
+   varstatc.contenido= stat;
+   listavar.contenido= "Lista Variables";
+   varc.contenido ="Variable";
+   varc.nodo.add(varstatc); 
+   varc.nodo.add(vartipoc);
+
+   varc.nodo.add(listavar); 
+   
+}else{
+listavar.contenido= "Lista Variables";
+   contclase.nodo.add(varc);
+   varc.contenido ="Variable"; 
+   varc.nodo.add(vartipoc);
+   varc.nodo.add(listavar); 
+}
+
+:}
 ;
 
-EXP ::= IDD                                           
-    |NUMERO
-    |TEXTO
+FINALSTATIC::=FINAL STATIC:st TIPOD:td LISTAID
+{:
+if(st.equals("")){
+contclase.nodo.add(varc);
+varc.contenido ="Variable";
+vartipoc.contenido = td;
+varc.nodo.add(varfinalc);
+varc.nodo.add(vartipoc);
+
+}else{
+contclase.nodo.add(varc);
+   varc.contenido ="Variable";
+vartipoc.contenido = td;
+varstatc.contenido="static";
+
+varc.nodo.add(varfinalc);
+varc.nodo.add(varstatc);
+varc.nodo.add(vartipoc);
+}
+:}
+;
+
+EXP ::= IDD:id                                           
+    |NUMERO:id 
+    |TEXTO:id 
     |TRU
-    |FAL
-    |MENOS NUMID
-    |PAR_A EXP PAR_B                                    
-    |EXP MENOS EXP
+    |FAL 
+    |MENOS NUMID:id 
+    |PAR_A EXP PAR_B                 
+    |EXP MENOS EXP 
     |EXP MAS EXP
     |EXP POR EXP
     |EXP DIVIDIR EXP
@@ -330,43 +435,49 @@ EXP ::= IDD
     |TEXTO1   
 ;
 
-NUMID ::= IDD
-        |NUMERO
+NUMID ::= IDD:id {:RESULT = id;:}
+        |NUMERO:num {:RESULT = num;:}
 ;
 
 
 LISTAID ::=LISTAID COMA LISTAID2 
-
-        |LISTAID2 {::}
+        |LISTAID2 
 ;
 
-LISTAID2 ::= IDD:id
-{:  
-             
+LISTAID2 ::= IDD:id 
+{:
+Nodo nuevav = new Nodo();
+nuevav.contenido = id;
+listavar.nodo.add(nuevav);
 :}
 ;
 
 IMPORT ::= IMPORT IMPORT2
-        |IMPORT2
+{: 
+nodolista1.nodo.add(nodonombre);
+:}
+
+        |IMPORT2:im2 {: nodolista1.nodo.add(nodonombre); :}
 ;
        
-IMPORT2 ::= IMP NOMBREIMP PUNTOCOMA
-       
+IMPORT2 ::= IMP NOMBREIMP:nom PUNTOCOMA
+{:
+nodonombre.contenido = nom; 
+:}       
 ;
 
-NOMBREIMP ::= CADENAIMP
-            |CADENAIMP PUNTO POR
+NOMBREIMP ::= CADENAIMP:cad {: RESULT = cad; :}
+            |CADENAIMP:cad PUNTO POR {: RESULT = cad+".*"; :}
 ;
 
-CADENAIMP ::= CADENAIMP PUNTO IDD
-            |IDD
+CADENAIMP ::= CADENAIMP:cad PUNTO IDD:id {: RESULT = cad+"."+id; :}
+            |IDD:id {: RESULT=id; :}
 ;
 
 TIPOD ::= STRINGG:st {: RESULT = st; :}
         |BOOL:bo     {: RESULT = bo; :}
         |DOUB:du     {: RESULT = du; :}
         |INT:in      {: RESULT = in; :}
-        |LONGG:lo    {: RESULT = lo; :}
         |CHARR:ch    {: RESULT = ch; :}
         
 ;
@@ -378,18 +489,18 @@ OPOI ::= ANDD
       |ORR
 ;
 
-VISIB ::= PUB
-       |PRIV
-       |PROTEC
-       |VACIO
+VISIB ::= PUB:pu {:RESULT = pu;:}
+       |PRIV:pri {:RESULT = pri;:}
+       |PROTEC:pro {:RESULT = pro;:}
+       |VACIO {:RESULT = "";:}
 ;
 
-FINAL ::= FINA
+FINAL ::= FINA {:varfinalc.contenido = "final";:}
         
 ;
 
-STATIC ::= STAT
-        |VACIO
+STATIC ::= STAT {:RESULT = "static";:}
+        |VACIO {:RESULT = "";:}
 ;
 
 VACIO::=;
