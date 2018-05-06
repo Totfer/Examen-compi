@@ -7,5 +7,4 @@ public class CompiProyecto1 {
         prcipal.show();
         prcipal.setVisible(true);
    }
- 
 }

@@ -87,7 +87,7 @@
           <Properties>
             <Property name="columns" type="int" value="20"/>
             <Property name="rows" type="int" value="5"/>
-            <Property name="text" type="java.lang.String" value="package compi;&#xa;import java.util.*; &#xa;import java.sql.base1;&#xa;public class ejemplo_final&#xa;{&#xa;public static String asd(int sa){&#xa;int aa;&#xa;int asd=1+2+3+4;&#xa;if(3+4&lt;5+4&amp;&amp;a==b||as!=s){&#xa;int a;&#xa;}&#xa;else if(3+4&lt;5+4){&#xa;int as2;&#xa;}&#xa;else{&#xa;int a;&#xa;&#xa;}&#xa;switch(a+a){&#xa;                case 4:&#xa;                    &#xa;                    break;&#xa;                    }&#xa;}&#xa;}"/>
+            <Property name="text" type="java.lang.String" value="package compi;&#xa;import java.util.*; &#xa;import java.sql.base1;&#xa;public class ejemplo_final&#xa;{&#xa;int aa;&#xa;public int a;&#xa;public static String asd(int sa){&#xa;&#xa;int asd=1+2+3+4;&#xa;if(3+4&lt;5+4&amp;&amp;a==b||as!=s){&#xa;int a;&#xa;}&#xa;else if(3+4&lt;5+4){&#xa;int as2;&#xa;}&#xa;else{&#xa;int a;&#xa;&#xa;}&#xa;switch(a+a){&#xa;                case 4:&#xa;                    &#xa;                    break;&#xa;                    }&#xa;}&#xa;}"/>
           </Properties>
         </Component>
       </SubComponents>

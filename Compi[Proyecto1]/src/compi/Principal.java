@@ -1,6 +1,8 @@
 package compi;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.StringReader;
 import java.util.logging.Level;
 import java_cup.runtime.Symbol;
@@ -45,7 +47,7 @@ public class Principal extends javax.swing.JFrame {
 
         entrada.setColumns(20);
         entrada.setRows(5);
-        entrada.setText("package compi;\nimport java.util.*; \nimport java.sql.base1;\npublic class ejemplo_final\n{\npublic static String asd(int sa){\nint aa;\nint asd=1+2+3+4;\nif(3+4<5+4&&a==b||as!=s){\nint a;\n}\nelse if(3+4<5+4){\nint as2;\n}\nelse{\nint a;\n\n}\nswitch(a+a){\n                case 4:\n                    \n                    break;\n                    }\n}\n}");
+        entrada.setText("package compi;\nimport java.util.*; \nimport java.sql.base1;\npublic class ejemplo_final\n{\nint aa;\npublic int a;\npublic static String asd(int sa){\n\nint asd=1+2+3+4;\nif(3+4<5+4&&a==b||as!=s){\nint a;\n}\nelse if(3+4<5+4){\nint as2;\n}\nelse{\nint a;\n\n}\nswitch(a+a){\n                case 4:\n                    \n                    break;\n                    }\n}\n}");
         jScrollPane2.setViewportView(entrada);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -77,7 +79,59 @@ public class Principal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+     String grafo;
+     int contador;
+    public String getDOT(Nodo raiz)
+        {
+            grafo = "digraph G{";
+            grafo += "node[shape=\"box\"];\n";
+            grafo += "nodo0[label=\"" + escapar(raiz.contenido).replace("\"", "") + "\"];\n";
+            contador = 1;
+            recorrerAST("nodo0", raiz);
+            grafo += "}";
 
+            return grafo;
+
+        }
+
+
+        private  void recorrerAST(String padre, Nodo hijos)
+        {
+            int i=0;
+            if(contador==77){
+            contador=contador;
+            }
+            while (i<hijos.nodo.size())
+            {
+                String nombreHijo = "nodo" + String.valueOf(contador);
+              
+                try{
+                grafo += nombreHijo + "[label=\"" + escapar(hijos.nodo.get(i).contenido).replace("\"", "") + "\"];\n";
+                
+                }catch(Exception e){
+                grafo += nombreHijo + "[label=\"" + escapar("a").replace("\"", "") + "\"];\n";
+                
+                }
+                
+                grafo += padre + "->" + nombreHijo + ";\n";
+                contador++;
+                if(hijos.nodo.get(i)!=null){
+                recorrerAST(nombreHijo, hijos.nodo.get(i));
+                
+                }
+                i++;
+            }
+        }
+        
+     private static String escapar(String cadena)
+        {
+            cadena = cadena.replace("\\", "\\\\");
+            cadena = cadena.replace("\"", "\\\"");
+
+
+            return cadena;
+        }
+       
     private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
  
        
@@ -87,8 +141,48 @@ public class Principal extends javax.swing.JFrame {
             scanner scan = new scanner(new BufferedReader( new StringReader(texto)));
             parser parser = new parser(scan);
             parser.parse();
+            Nodo nodo = new Nodo();
+            nodo= parser.RegresarNodo();
+             
+            String dot =getDOT(nodo);
             
-            entrada1.setText(parser.action_obj.codigo);
+            File archivo=new File("C:\\Users\\arnol\\OneDrive\\Escritorio\\codigo.txt");
+
+//Crear objeto FileWriter que sera el que nos ayude a escribir sobre archivo
+FileWriter escribir=new FileWriter(archivo,false);
+
+//Escribimos en el archivo con el metodo write 
+escribir.write(dot);
+
+//Cerramos la conexion
+escribir.close();
+            try {
+//path del dot.exe,por lo general es la misma, pero depende de donde hayas instalado el paquete de Graphviz
+String dotPath = "C:\\Program Files (x86)\\Graphviz2.38\\bin\\dot.exe";
+//path del archivo creado con el codigo del graphviz que queremos
+String fileInputPath = "C:\\Users\\arnol\\OneDrive\\Escritorio\\codigo.txt";
+//path de salida del grafo, es decir el path de la imagen que vamos a crear con graphviz
+String fileOutputPath = "C:\\Users\\arnol\\OneDrive\\Escritorio\\grafo1.jpg";
+//tipo de imagen de salida, en este caso es jpg
+String tParam = "-Tjpg";
+String tOParam = "-o";
+//concatenamos nuestras direcciones. Lo que hice es crear un vector, para poder editar las direcciones de entrada y salida, usando las variables antes inicializadas
+//recordemos el comando en la consola de windows: C:\Archivos de programa\Graphviz 2.21\bin\dot.exe -Tjpg grafo1.txt -o grafo1.jpg Esto es lo que concatenamos en el vector siguiente:
+
+String[] cmd = new String[5];
+cmd[0] = dotPath;
+cmd[1] = tParam;
+cmd[2] = fileInputPath;
+cmd[3] = tOParam;
+cmd[4] = fileOutputPath;
+//Invocamos nuestra clase 
+Runtime rt = Runtime.getRuntime();
+//Ahora ejecutamos como lo hacemos en consola
+rt.exec( cmd );
+} catch (Exception ex) {
+ex.printStackTrace();
+}  
+           
             Symbol m = scan.next_token();
         } catch (Exception ex) {
             java.util.logging.Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);

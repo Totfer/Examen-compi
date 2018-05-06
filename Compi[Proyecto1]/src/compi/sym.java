@@ -15,6 +15,7 @@ public class sym {
   public static final int MASMAS = 7;
   public static final int THE = 50;
   public static final int MAYORRIGUAL = 19;
+  public static final int POT = 69;
   public static final int MENOSMENOS = 8;
   public static final int CHARR = 32;
   public static final int POR = 28;
@@ -146,7 +147,8 @@ public class sym {
   "TRU",
   "FAL",
   "TEXTO1",
-  "CONT"
+  "CONT",
+  "POT"
   };
 }
 

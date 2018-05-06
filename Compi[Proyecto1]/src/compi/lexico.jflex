@@ -29,7 +29,8 @@ import java_cup.runtime.Symbol;
 
 
 ESPACIO            =[\ ]
-NUMERO             = [\-]?[0-9]+
+NUMERO             = [\-]?[0-9]+("." [0-9]+)?
+
 
 MODULO      = "%"
 CONT        = "continue"
@@ -73,6 +74,7 @@ PROTEC    = "protected"
 PRIV      = "private"
 STAT      = "static"
 FINA      = "final"
+POT      = "^"
 RET       = "return"
 BRE       = "break"
 IFF           = "If"
@@ -101,7 +103,8 @@ EXPLINE            = [\ \n]
 
 
                                                                                   
-<YYINITIAL> {MODULO}            { return new Symbol(sym.MODULO,          yyline, yycolumn, yytext());}
+<YYINITIAL> {MODULO}            { return new Symbol(sym.MODULO,      yyline, yycolumn, yytext());}
+<YYINITIAL> {POT}            { return new Symbol(sym.POT,          yyline, yycolumn, yytext());}
                                                                                      
 <YYINITIAL> {CONT}            { return new Symbol(sym.CONT,          yyline, yycolumn, yytext());}
                                                                      
