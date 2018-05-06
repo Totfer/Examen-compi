@@ -20,36 +20,20 @@ parser code
         System.out.println("Fatal Syntax Error: "+ s.value + " Linea " + (s.left+1) + " Col " + (s.right + 1) +"\n");
     }
  
+    Nodo raiz = new Nodo();   
+
     public Nodo RegresarNodo(){
-    return nodo;
+    return raiz;
     } 
 
 
     Stack<Nodo> pila = new Stack<Nodo>();     
-
-    Nodo nodo = new Nodo();
-
-Nodo nodolista1=new Nodo();
-Nodo nodolista2=new Nodo();
-Nodo nodoimp=new Nodo(); 
-Nodo nodonombre=new Nodo(); 
-Nodo nodoclas = new Nodo();
-
-Nodo clac = new Nodo(); 
-Nodo visc = new Nodo(); 
-Nodo idc = new Nodo(); 
-Nodo contclase = new Nodo();
-Nodo varc = new Nodo();
-
-Nodo varstatc=new Nodo();
-Nodo listavar=new Nodo();
-Nodo varvisc=new Nodo();
-Nodo vartipoc=new Nodo();
-
-Nodo varfinalc=new Nodo();
-
-
-   
+	Nodo nodolist = new Nodo();
+    Nodo nodoconclas = new Nodo();
+    Nodo nodoconclas2 = new Nodo();
+	Nodo listapar = new Nodo();
+	Nodo contmet = new Nodo();
+	
 
 :}
 
@@ -59,76 +43,101 @@ action code
   
 :}
 
-terminal String IMP, VOIDD, CLAS, COMILLA, NEWW, MASMAS, MENOSMENOS, PAR_A, PAR_B, CORRCH_A, CORRCH_B, COMA, PUNTOCOMA, PUNTO, MENORR, MENORRIGUAL, MAYORR, MAYORRIGUAL, DIFERENTE, GUALIGUAL, ANDD;
+terminal String IMP,  VOIDD, CLAS, COMILLA, NEWW, MASMAS, MENOSMENOS, PAR_A, PAR_B, CORRCH_A, CORRCH_B, COMA, PUNTOCOMA, PUNTO, MENORR, MENORRIGUAL, MAYORR, MAYORRIGUAL, DIFERENTE, GUALIGUAL, ANDD;
 terminal String ORR, NOTT, MAS, MODULO, MENOS, POR, COMILLASIMP, DIVIDIR,  INT, CHARR,  BOOL, DOUB, LONGG, STRINGG, PUB, PROTEC, PRIV,  STAT, FINA, RET,  BRE,  IFF,  ELS,  DEF,  CAS;
-terminal String FORR, WHIL, THE, DOSPUNTOS, SWIT, DOO, PACK, CONS, READL, WRITEL, MASS, NUMERO, IDD, FILA, IGUALIGUAL, TEXTO, IGUAL, TRU, FAL, TEXTO1, CONT; 
+terminal String FORR, WHIL, THE, DOSPUNTOS, SWIT, DOO, PACK, CONS, READL, WRITEL, MASS, NUMERO, IDD, FILA, IGUALIGUAL, TEXTO, IGUAL, TRU, FAL, TEXTO1, CONT, POT; 
 
 
-nonterminal String INICIO, IMPORTCLASS, MOD, IMPORT, IMPORT2, CLASS, NOMBREIMP, PACKAGE, CADENAIMP, CADENAIMPPUNTO, CADENAIMPID, VISIB, OPERADORES, CONTENIDOSWITCH3;
-nonterminal String IIF, CONDICION, CADENAIMPASTER, CONTENIDOCLASE, DECLARACIONDATO, VACIO, STATIC, DECLARACION, TIPOD, LISTAID, LISTAID2, EXP, NUMID, OPMAT;
-nonterminal String DECLACADENA, ASIGNAR, DECLAMETODO, PARAMETROS, PARAMETROS2, PARAMETROS3, CONTENIDOMETODO, CONTENIDOMETODO2, IIFF, CONTENIDOCLASE2, CONDIFF, IDDD;
-nonterminal String METODODATO, NO, CONTENIDOMETODO3, FINAL, FINALSTATIC, CONDICION2, OP, OPOI, ELSE, ELSE2, ELSE1, ELSEI, WHILE, DO, FOR, ELSEI2, ELSEI3, PRINT,PA;
-nonterminal String SWITCH, THES, LLAMADA, CONTENIDOLLAMADA, CONTENIDOLLAMADA2, CONTENIDOSWITCH, CONTENIDOSWITCH2, COMILL, DEFAULT, RETURN, RETURN2, MET, LLAMADA2, LLAMADA3, INT2, FINAL2;
-nonterminal String VISFI;
-precedence left MAS, MENOS, POR, DIVIDIR, MODULO;
+nonterminal Nodo INICIO, IMPORTCLASS,VOID, MOD, CLASS, PACKAGE, CADENAIMPPUNTO, CADENAIMPID, OPERADORES, CONTENIDOSWITCH3;
+nonterminal Nodo IIF, CONDICION, CADENAIMPASTER, CONTENIDOCLASE, DECLARACIONDATO, VACIO, DECLARACION, LISTAID, EXP, OPMAT;
+nonterminal Nodo DECLACADENA, ASIGNAR, DECLAMETODO, PARAMETROS, PARAMETROS2, PARAMETROS3, CONTENIDOMETODO, CONTENIDOMETODO2, IIFF, CONTENIDOCLASE2, CONDIFF, IDDD;
+nonterminal Nodo METODODATO, NO, CONTENIDOMETODO3, FINAL, FINALSTATIC, CONDICION2, OP, OPOI, ELSE, ELSE2, ELSE1, ELSEI, WHILE, DO, FOR, ELSEI2, ELSEI3, PRINT,PA;
+nonterminal Nodo SWITCH, THES, LLAMADA, CONTENIDOLLAMADA, CONTENIDOLLAMADA2, CONTENIDOSWITCH, CONTENIDOSWITCH2, COMILL, DEFAULT, RETURN, RETURN2, MET, LLAMADA2, LLAMADA3, INT2, FINAL2;
+nonterminal Nodo VISFI;
+nonterminal String CADENAIMP, NOMBREIMP, IMPORT, IMPORT2,VISIB,LISTAID2,STATIC,NUMID,TIPOD;
 
+
+precedence left MAS, MENOS;
+precedence left POR, DIVIDIR, MODULO;
+precedence left POT;
 start with INICIO;
 
-INICIO ::= PACKAGE{:nodo.contenido = "Inico";:}
+INICIO ::= {:raiz.contenido="raiz";:} PACKAGE
 ;
 
-PACKAGE ::= PA:p PUNTOCOMA 
-{: 
-Nodo nod=new Nodo(); 
-Nodo nodopack=new Nodo(); 
-
-nodopack.contenido="Package"; 
-nod.contenido = p; 
-
-nodopack.nodo.add(nod); 
-nodo.nodo.add(nodopack);
-:} 
-IMPORTCLASS 
+PACKAGE ::= PA:p {: raiz.nodo.add(p); :}  PUNTOCOMA IMPORTCLASS 
          |IMPORTCLASS
          |error PUNTOCOMA
          |error CORRCH_B
 ;
 
-PA::=PACK IDD:id {: RESULT = id; :}
 
-;
-
+IMPORTCLASS ::= IMPORT:imp 
 
 
-IMPORTCLASS ::= {: 
-nodoimp.contenido="Import"; 
-nodolista1.contenido = "Lista Import";
-nodoimp.nodo.add(nodolista1);
-nodo.nodo.add(nodoimp);
-:} IMPORT:imp  CLASS 
+CLASS 
              |CLASS
 ;
 
-CLASS ::= VISIB:vis CLAS:cla IDD:id CORRCH_A 
+PA::=PACK IDD:id  
 {:
-nodoclas.contenido = "Clase";
+Nodo nret = new Nodo();
+Nodo npac = new Nodo();
+Nodo nid = new Nodo();
+nret.contenido ="Package";
+nid.contenido=id;
+npac.contenido="package";
 
-clac.contenido = "clase"; 
-visc.contenido = vis;  
-idc.contenido = id;
+nret.nodo.add(npac);
+nret.nodo.add(nid);
 
-contclase.contenido="Contenido Clase";
+RESULT = nret; 
+:}
+             |CLASS
+;
+
+CLASS ::= VISIB:vis CLAS:cla IDD:id CORRCH_A CONTENIDOCLASE2 CORRCH_B
+{:
+if(vis.equals("")){
+Nodo nclas=new Nodo();
+raiz.nodo.add(nclas);
+
+Nodo nid=new Nodo(); 
+Nodo nclas2=new Nodo(); 
+
+nclas.contenido="Clase";
+nid.contenido=id;
+nclas2.contenido="class";
+
+nclas.nodo.add(nclas2);
+nclas.nodo.add(nid);
+nclas.nodo.add(nodoconclas2);
+nodoconclas2=new Nodo();
+	
+}else{
+	Nodo nclas=new Nodo();
+raiz.nodo.add(nclas);
+
+Nodo nvis=new Nodo(); 
+Nodo nid=new Nodo(); 
+Nodo nclas2=new Nodo(); 
+
+nvis.contenido=vis;
+nclas.contenido="Clase";
+nid.contenido=id;
+nclas2.contenido="class";
+
+nclas.nodo.add(nvis);
+nclas.nodo.add(nclas2);
+nclas.nodo.add(nid);
+nclas.nodo.add(nodoconclas2);
+nodoconclas2=new Nodo();
 
 
-nodoclas.nodo.add(clac);
-nodoclas.nodo.add(visc);
-nodoclas.nodo.add(idc);
-nodoclas.nodo.add(contclase);
-nodo.nodo.add(nodoclas);
 
-:} 
-CONTENIDOCLASE2 CORRCH_B
+}
 
+:}
 ;
 
 CONTENIDOCLASE2 ::= CONTENIDOCLASE2 CONTENIDOCLASE
@@ -139,7 +148,74 @@ CONTENIDOCLASE ::= DECLARACIONDATO
                 |DECLAMETODO
 ;
 
-DECLAMETODO ::= VISIB STATIC TIPOD:td IDD:id PAR_A PARAMETROS3:paramet PAR_B CORRCH_A CONTENIDOMETODO3 CORRCH_B
+DECLAMETODO ::= VISIB:vi STATIC:stat TIPOD:td IDD:id PAR_A PARAMETROS3:paramet PAR_B CORRCH_A CONTENIDOMETODO3 CORRCH_B 
+{:
+if(!stat.equals("")){
+
+Nodo nmet=new Nodo();
+
+Nodo nvis=new Nodo();
+Nodo nstat=new Nodo();
+Nodo ntipo=new Nodo();
+Nodo nid=new Nodo();
+Nodo npar=new Nodo();
+Nodo ncont=new Nodo();
+
+nvis.contenido=vi;
+nstat.contenido=stat;
+ntipo.contenido=td;
+nid.contenido=id;
+npar.contenido="Lita Parametros";
+ncont.contenido="Contenido Clase";
+nmet.contenido ="Metodo";
+
+nmet.nodo.add(nvis);
+nmet.nodo.add(nstat);
+nmet.nodo.add(ntipo);
+nmet.nodo.add(nid);
+
+npar.nodo.add(listapar);
+listapar=new Nodo();
+nmet.nodo.add(npar);
+
+ncont.nodo.add(contmet);
+contmet=new Nodo();
+nmet.nodo.add(ncont);
+
+nodoconclas2.nodo.add(nmet);
+}else{
+	Nodo nmet=new Nodo();
+
+Nodo nvis=new Nodo();
+Nodo ntipo=new Nodo();
+Nodo nid=new Nodo();
+Nodo npar=new Nodo();
+Nodo ncont=new Nodo();
+
+nvis.contenido=vi;
+ntipo.contenido=td;
+nid.contenido=id;
+npar.contenido="Lita Parametros";
+ncont.contenido="Contenido Clase";
+nmet.contenido ="Metodo";
+
+nmet.nodo.add(nvis);
+nmet.nodo.add(ntipo);
+nmet.nodo.add(nid);
+
+npar.nodo.add(listapar);
+listapar=new Nodo();
+nmet.nodo.add(npar);
+
+ncont.nodo.add(contmet);
+contmet=new Nodo();
+nmet.nodo.add(ncont);
+
+nodoconclas2.nodo.add(nmet);
+
+	
+}
+:}
 ;
 
 
@@ -160,13 +236,13 @@ CONTENIDOMETODO ::= CONTENIDOMETODO CONTENIDOMETODO2
                 |CONTENIDOMETODO2
 ;
 
-CONTENIDOMETODO2 ::= METODODATO
-                   |IIFF
-                   |WHILE
-                   |DO
-                   |FOR
-                   |SWITCH
-                   |LLAMADA
+CONTENIDOMETODO2 ::= METODODATO:mt {:contmet.contenido="Contendo Metodo"; contmet.nodo.add(mt); :}
+                   |IIFF:mt {:contmet.contenido="Contendo Metodo"; contmet.nodo.add(mt); :}
+                   |WHILE:mt {:contmet.contenido="Contendo Metodo"; contmet.nodo.add(mt); :}
+                   |DO:mt {:contmet.contenido="Contendo Metodo"; contmet.nodo.add(mt); :}
+                   |FOR:mt {:contmet.contenido="Contendo Metodo"; contmet.nodo.add(mt); :}
+                   |SWITCH:mt {:contmet.contenido="Contendo Metodo"; contmet.nodo.add(mt); :}
+                   |LLAMADA:mt {:contmet.contenido="Contendo Metodo"; contmet.nodo.add(mt); :}
                    |THES
                    |RETURN 
                    |BRE PUNTOCOMA
@@ -212,6 +288,7 @@ CONTENIDOSWITCH2::= CONTENIDOSWITCH3
 ;
 
 CONTENIDOSWITCH3 ::=CONTENIDOSWITCH3 CONTENIDOSWITCH
+			|CONTENIDOSWITCH
 ;
 
 COMILL::= TEXTO1
@@ -219,12 +296,8 @@ COMILL::= TEXTO1
         |NUMERO
 ;
 
-DEFAULT ::= DEF DOSPUNTOS CONTENIDOMETODO3 
-         |VACIO
-;
-
 CONTENIDOSWITCH::= CAS COMILL DOSPUNTOS CONTENIDOMETODO3
-             |DEFAULT DOSPUNTOS CONTENIDOMETODO3
+             |DEF DOSPUNTOS CONTENIDOMETODO3
 ;
 
 FOR ::= FORR PAR_A  IDDD PUNTOCOMA CONDICION PUNTOCOMA IDDD PAR_B CORRCH_A CONTENIDOMETODO3 CORRCH_B
@@ -238,17 +311,11 @@ IDDD::=INT2:tipo IDD:idd IGUAL EXP
 ;
 
 INT2 ::= INT:in
-{:
-RESULT =in;
-:}
+
       |CHARR:ch
-{:
-RESULT =ch;
-:}
+
       |DOUB:duu
-{:
-RESULT =duu;
-:}      
+  
 ;
 
 DO ::= DOO CORRCH_A CONTENIDOMETODO3 CORRCH_B WHIL PAR_A CONDICION PAR_B 
@@ -258,23 +325,108 @@ WHILE ::= WHIL PAR_A CONDICION PAR_B CORRCH_A CONTENIDOMETODO3 CORRCH_B
        
 ;
 
-METODODATO::= TIPOD:td IDD:id ASIGNAR PUNTOCOMA
-            {:
-            :}
-            |IDD ASIGNAR PUNTOCOMA
-            |FINA TIPOD:tip IDD:id ASIGNAR PUNTOCOMA
-            {:
-            :}
-            |IDD IDD IGUAL NEWW IDD PAR_A PAR_B PUNTOCOMA   
-            |IDD MAS IGUAL EXP PUNTOCOMA 
-            |IDD MENOS IGUAL EXP PUNTOCOMA
-            |IDD MODULO IGUAL EXP PUNTOCOMA 
-            |IDD POR IGUAL EXP PUNTOCOMA 
-            |IDD DIVIDIR IGUAL EXP PUNTOCOMA             
+METODODATO::= TIPOD:td IDD:id ASIGNAR:asg PUNTOCOMA
+{:
+Nodo nvar=new Nodo();
+Nodo ntipo=new Nodo();
+Nodo nid=new Nodo();
+Nodo nasg=new Nodo();
+
+nvar.contenido="Variable";
+ntipo.contenido=td;
+nid.contenido=id;
+nasg.contenido="Asignar";
+
+nasg.nodo.add(asg);
+
+nvar.nodo.add(ntipo);
+nvar.nodo.add(nid);
+nvar.nodo.add(nasg);
+
+RESULT = nvar;
+:}
+            |IDD:id ASIGNAR:asg PUNTOCOMA
+			{:
+Nodo nvar=new Nodo();
+Nodo nid=new Nodo();
+Nodo nasg=new Nodo();
+
+nvar.contenido="Variable";
+nid.contenido=id;
+nasg.contenido="Asignar";
+
+nasg.nodo.add(asg);
+
+nvar.nodo.add(nid);
+nvar.nodo.add(nasg);
+
+RESULT = nvar;
+:}
+            |FINA TIPOD:td IDD:id ASIGNAR:asg PUNTOCOMA
+{:
+Nodo nvar=new Nodo();
+Nodo nfn=new Nodo();
+Nodo ntipo=new Nodo();
+Nodo nid=new Nodo();
+Nodo nasg=new Nodo();
+
+nvar.contenido="Variable";
+nfn.contenido="final";
+ntipo.contenido=td;
+nid.contenido=id;
+nasg.contenido="Asignar";
+
+nasg.nodo.add(asg);
+
+nvar.nodo.add(nfn);
+nvar.nodo.add(ntipo);
+nvar.nodo.add(nid);
+nvar.nodo.add(nasg);
+
+RESULT = nvar;
+:}           
+            |IDD:id1 IDD:id2 IGUAL NEWW IDD:id3 PAR_A PAR_B PUNTOCOMA  
+{:
+Nodo nvar=new Nodo();
+Nodo nid1=new Nodo();
+Nodo nid2=new Nodo();
+Nodo nnew=new Nodo();
+Nodo nid3=new Nodo();
+
+nvar.contenido="Llamada";
+nid1.contenido=id1;
+nid2.contenido=id2;
+nnew.contenido="new";
+nid3.contenido=id3;
+
+nvar.nodo.add(nid1);
+nvar.nodo.add(nid2);
+nvar.nodo.add(nnew);
+nvar.nodo.add(nid3);
+
+RESULT = nvar;
+:}                   
 ;
 
-IIFF ::= IFF PAR_A CONDICION PAR_B CORRCH_A CONTENIDOMETODO3 CORRCH_B ELSEI3   
-    
+IIFF ::= IFF PAR_A CONDICION: PAR_B CORRCH_A CONTENIDOMETODO3 CORRCH_B ELSEI3   
+{:
+Nodo nret=new Nodo();
+Nodo nif=new Nodo();
+Nodo ncond=new Nodo();
+Nodo ncont=new Nodo();
+
+
+nret.contenido="IF";
+nif.contenido="if";
+ncond.contenido="Condicion";
+ncont.contenido="Contenido";
+
+nret.nodo.add(nif);
+nret.nodo.add(ncond);
+nret.nodo.add(ncont);
+
+RESULT=nret;
+:}
 ;
 
 ELSEI3 ::= ELSEI 
@@ -331,154 +483,243 @@ PARAMETROS ::= PARAMETROS COMA PARAMETROS2
 
 PARAMETROS2 ::= TIPOD:td IDD:id
 {:
-          
+    listapar.contenido="Lista Parametros";
+Nodo npar=new Nodo();	
+Nodo ntipo=new Nodo();	
+Nodo nid=new Nodo();	
 
+npar.contenido="Parameto";
+ntipo.contenido=td;
+nid.contenido=id;
+
+npar.nodo.add(ntipo);
+npar.nodo.add(nid);
+
+listapar.nodo.add(nid);
 :}
 ; 
   
-DECLARACIONDATO ::= DECLACADENA ASIGNAR PUNTOCOMA    
-                  |FINALSTATIC ASIGNAR PUNTOCOMA 
+DECLARACIONDATO ::= DECLACADENA:cadena ASIGNAR:asg PUNTOCOMA   
+{:
+nodoconclas2.contenido="Contenido Clase";
+
+Nodo nvar = new Nodo();
+nvar.contenido="Variable";
+nvar.nodo.add(cadena);
+if(asg!=null){
+asg.contenido="exp";
+nvar.nodo.add(asg);
+}
+nodoconclas2.nodo.add(nvar);
+RESULT = nodoconclas2;
+:} 
+                  |FINALSTATIC:cadena ASIGNAR:asg PUNTOCOMA 
+{:
+nodoconclas2.contenido="Contenido Clase";
+
+Nodo nvar = new Nodo();
+nvar.contenido="Variable";
+nvar.nodo.add(cadena);
+if(asg!=null){
+asg.contenido="exp";
+nvar.nodo.add(asg);
+}
+nodoconclas2.nodo.add(nvar);
+RESULT = nodoconclas2;
+
+:}
 ;
 
-ASIGNAR ::= IGUAL EXP:exp 
+ASIGNAR ::=  IGUAL EXP:ex {:ex.contenido="EXP"; RESULT=ex;:}
         |VACIO
 ;
 
 DECLACADENA ::= VISIB:vis STATIC:stat TIPOD:tt LISTAID 
 {:
-vartipoc.contenido=tt;
 
 if(!vis.equals("")&&!stat.equals("")){
-   contclase.nodo.add(varc);
-   varc.contenido ="Variable";
-   varstatc.contenido= stat;
-   listavar.contenido= "Lista Variables";
-   varvisc.contenido = vis;
-   varc.nodo.add(varvisc);
-   
-   varc.nodo.add(varstatc);
-   varc.nodo.add(vartipoc);
-
-   varc.nodo.add(listavar);
+ Nodo ncadena=new Nodo();
+ 
+ Nodo nvis=new Nodo();
+ Nodo nstat=new Nodo();
+ Nodo ntipo=new Nodo();
+ 
+ ncadena.contenido="Datos";
+ nvis.contenido=vis;
+ nstat.contenido=stat;
+ ntipo.contenido=tt;
+ 
+ ncadena.nodo.add(nvis);
+ ncadena.nodo.add(nstat);
+ ncadena.nodo.add(ntipo);
+ ncadena.nodo.add(nodolist);
+ nodolist =new Nodo();
+ RESULT = ncadena;
  
 }
-else if(!vis.equals("")){
-   contclase.nodo.add(varc);
-   varvisc.contenido = vis;
-   varc.contenido ="Variable";  
-   listavar.contenido= "Lista Variables";
-   varc.nodo.add(varvisc);
-   varc.nodo.add(vartipoc);
-
-   varc.nodo.add(listavar);
+else if(vis.equals("")){
+  
+ Nodo ncadena=new Nodo();
  
+ Nodo nstat=new Nodo();
+ Nodo ntipo=new Nodo();
+ 
+ ncadena.contenido="Datos";
+ nstat.contenido=stat;
+ ntipo.contenido=tt;
+ 
+ ncadena.nodo.add(nstat);
+ ncadena.nodo.add(ntipo);
+ ncadena.nodo.add(nodolist);
+ nodolist =new Nodo();
+ RESULT = ncadena;
 }
-else if(!stat.equals("")){
-   contclase.nodo.add(varc);
-   varstatc.contenido= stat;
-   listavar.contenido= "Lista Variables";
-   varc.contenido ="Variable";
-   varc.nodo.add(varstatc); 
-   varc.nodo.add(vartipoc);
+else if(stat.equals("")){
 
-   varc.nodo.add(listavar); 
-   
+   Nodo ncadena=new Nodo();
+ 
+ Nodo nvis=new Nodo();
+ Nodo ntipo=new Nodo();
+ 
+ ncadena.contenido="Datos";
+ nvis.contenido=vis;
+ ntipo.contenido=tt;
+ 
+ ncadena.nodo.add(nvis);
+ ncadena.nodo.add(ntipo);
+ ncadena.nodo.add(nodolist);
+ nodolist =new Nodo();
+ RESULT = ncadena;
 }else{
-listavar.contenido= "Lista Variables";
-   contclase.nodo.add(varc);
-   varc.contenido ="Variable"; 
-   varc.nodo.add(vartipoc);
-   varc.nodo.add(listavar); 
+Nodo ncadena=new Nodo();
+ 
+ Nodo ntipo=new Nodo();
+ 
+ ncadena.contenido="Datos";
+ ntipo.contenido=tt;
+ 
+ ncadena.nodo.add(ntipo);
+ ncadena.nodo.add(nodolist);
+ nodolist =new Nodo();
+ RESULT = ncadena;
 }
 
 :}
 ;
 
-FINALSTATIC::=FINAL STATIC:st TIPOD:td LISTAID
+FINALSTATIC::=FINA STATIC:st TIPOD:td LISTAID
 {:
 if(st.equals("")){
-contclase.nodo.add(varc);
-varc.contenido ="Variable";
-vartipoc.contenido = td;
-varc.nodo.add(varfinalc);
-varc.nodo.add(vartipoc);
-
+	Nodo nfin=new Nodo();
+	Nodo ntipo=new Nodo();
+	Nodo nstat=new Nodo();
+	Nodo ncadena=new Nodo();
+	
+	nfin.contenido="final";
+	ntipo.contenido=td;
+	nstat.contenido="static";
+	
+	ncadena.nodo.add(nfin);
+	ncadena.nodo.add(nstat);
+	ncadena.nodo.add(ntipo);
+	ncadena.nodo.add(nodolist);
+        nodolist.nodo.clear();
+ 
+	RESULT = ncadena;
 }else{
-contclase.nodo.add(varc);
-   varc.contenido ="Variable";
-vartipoc.contenido = td;
-varstatc.contenido="static";
-
-varc.nodo.add(varfinalc);
-varc.nodo.add(varstatc);
-varc.nodo.add(vartipoc);
+	Nodo nfin=new Nodo();
+	Nodo ntipo=new Nodo();
+	Nodo ncadena=new Nodo();
+	
+	nfin.contenido="final";
+	ntipo.contenido=td;
+	
+	ncadena.nodo.add(nfin);
+	ncadena.nodo.add(ntipo);
+	ncadena.nodo.add(nodolist);
+        nodolist.nodo.clear();
+ 
+	RESULT = ncadena;
+	
 }
 :}
 ;
 
-EXP ::= IDD:id                                           
-    |NUMERO:id 
-    |TEXTO:id 
-    |TRU
-    |FAL 
-    |MENOS NUMID:id 
-    |PAR_A EXP PAR_B                 
-    |EXP MENOS EXP 
-    |EXP MAS EXP
-    |EXP POR EXP
-    |EXP DIVIDIR EXP
-    |EXP MODULO EXP
+
+EXP ::= IDD:id {:Nodo nid=new Nodo(); nid.contenido=id; RESULT = nid;:}                     
+    |NUMERO:id {:Nodo nid=new Nodo(); nid.contenido=id; RESULT = nid;:}   
+    |TEXTO:id {:Nodo nid=new Nodo(); nid.contenido=id; RESULT = nid;:}  
+    |TRU:id {:Nodo nid=new Nodo(); nid.contenido="true"; RESULT = nid;:}  
+	|EXP:ex1 POR EXP:ex2 {:Nodo nop=new Nodo(); Nodo nret=new Nodo(); nret.contenido="EXP"; nop.contenido="*"; nret.nodo.add(ex1); nret.nodo.add(nop); nret.nodo.add(ex2); RESULT = nret;:}
+    |EXP:ex1 DIVIDIR EXP:ex2{:Nodo nop=new Nodo(); Nodo nret=new Nodo(); nret.contenido="EXP"; nop.contenido="/"; nret.nodo.add(ex1); nret.nodo.add(nop); nret.nodo.add(ex2); RESULT = nret;:}
+    |EXP:ex1 MODULO EXP:ex2{:Nodo nop=new Nodo(); Nodo nret=new Nodo(); nret.contenido="EXP"; nop.contenido="%"; nret.nodo.add(ex1); nret.nodo.add(nop); nret.nodo.add(ex2); RESULT = nret;:}
+    |EXP:ex1 MENOS EXP:ex2 {:Nodo nop=new Nodo(); Nodo nret=new Nodo(); nret.contenido="EXP"; nop.contenido="-"; nret.nodo.add(ex1); nret.nodo.add(nop); nret.nodo.add(ex2); RESULT = nret;:}
+    |EXP:ex1 MAS EXP:ex2{:Nodo nop=new Nodo(); Nodo nret=new Nodo(); nret.contenido="EXP"; nop.contenido="+"; nret.nodo.add(ex1); nret.nodo.add(nop); nret.nodo.add(ex2); RESULT = nret;:}
+    |EXP:ex1 POT EXP:ex2	{:Nodo nop=new Nodo(); Nodo nret=new Nodo(); nret.contenido="EXP"; nop.contenido="^"; nret.nodo.add(ex1); nret.nodo.add(nop); nret.nodo.add(ex2); RESULT = nret;:}
+    |FAL:id {:Nodo nid=new Nodo(); nid.contenido="false"; RESULT = nid;:}  
+    |MENOS NUMID:id {:Nodo nid=new Nodo(); nid.contenido="-"+id; RESULT = nid;:}  
+    |PAR_A EXP:ex PAR_B  {:RESULT = ex;:}                    
     |IDD MASMAS   
     |IDD MENOSMENOS
     |MASMAS IDD   
     |MENOSMENOS IDD
-    |TEXTO1   
+    |TEXTO1:id {:Nodo nid=new Nodo(); nid.contenido=id; RESULT = nid;:}  
 ;
 
-NUMID ::= IDD:id {:RESULT = id;:}
-        |NUMERO:num {:RESULT = num;:}
+NUMID ::= IDD:id 
+        |NUMERO:num 
 ;
 
 
 LISTAID ::=LISTAID COMA LISTAID2 
-        |LISTAID2 
+        |LISTAID2
 ;
 
 LISTAID2 ::= IDD:id 
-{:
-Nodo nuevav = new Nodo();
-nuevav.contenido = id;
-listavar.nodo.add(nuevav);
+{: 
+nodolist.contenido="Lista Variables";
+Nodo aux = new Nodo(); 
+aux.contenido=id;
+nodolist.nodo.add(aux);; 
 :}
 ;
 
-IMPORT ::= IMPORT IMPORT2
-{: 
-nodolista1.nodo.add(nodonombre);
-:}
+IMPORT ::= IMPORT:im1 IMPORT2:im2{:RESULT =im1+im2;:}
 
-        |IMPORT2:im2 {: nodolista1.nodo.add(nodonombre); :}
+
+        |IMPORT2:im2 {:RESULT =im2;:}
 ;
        
 IMPORT2 ::= IMP NOMBREIMP:nom PUNTOCOMA
 {:
-nodonombre.contenido = nom; 
-:}       
+Nodo nimport = new Nodo();
+raiz.nodo.add(nimport);
+Nodo ncontador = new Nodo();
+
+nimport.contenido="Import";
+ncontador.contenido=nom;
+
+nimport.nodo.add(ncontador);
+:}
 ;
 
-NOMBREIMP ::= CADENAIMP:cad {: RESULT = cad; :}
-            |CADENAIMP:cad PUNTO POR {: RESULT = cad+".*"; :}
+NOMBREIMP ::= CADENAIMP:cad  {:RESULT = cad;:}
+            |CADENAIMP:cad PUNTO POR {:RESULT=cad+".*";:} 
 ;
 
-CADENAIMP ::= CADENAIMP:cad PUNTO IDD:id {: RESULT = cad+"."+id; :}
-            |IDD:id {: RESULT=id; :}
+CADENAIMP ::= CADENAIMP:cad PUNTO IDD:id 
+{:
+RESULT =cad +"."+id;
+:}
+            |IDD:idd
+			{: RESULT = idd; :}			
 ;
 
-TIPOD ::= STRINGG:st {: RESULT = st; :}
-        |BOOL:bo     {: RESULT = bo; :}
-        |DOUB:du     {: RESULT = du; :}
-        |INT:in      {: RESULT = in; :}
-        |CHARR:ch    {: RESULT = ch; :}
+TIPOD ::= STRINGG:st {:RESULT = "string";:}
+        |BOOL:bo     {:RESULT = "boolean";:}
+        |DOUB:du     {:RESULT =  "double";:}
+        |INT:in      {:RESULT = "int";:}
+        |CHARR:ch    {:RESULT ="char";:}
         
 ;
 
@@ -489,14 +730,10 @@ OPOI ::= ANDD
       |ORR
 ;
 
-VISIB ::= PUB:pu {:RESULT = pu;:}
-       |PRIV:pri {:RESULT = pri;:}
-       |PROTEC:pro {:RESULT = pro;:}
-       |VACIO {:RESULT = "";:}
-;
-
-FINAL ::= FINA {:varfinalc.contenido = "final";:}
-        
+VISIB ::= PUB:pu {: RESULT = pu;:}
+       |PRIV:pri {: RESULT = pri;:}
+       |PROTEC:pro{: RESULT = pro;:}
+       |VACIO {: RESULT = "";:}
 ;
 
 STATIC ::= STAT {:RESULT = "static";:}
